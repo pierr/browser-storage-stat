@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Client storage test.</title>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-git2.js"></script>
+        <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <link rel="author" href="humans.txt">
+    </head>
+    <body>
+      <div class="container">
+        <h1>Client storage test</h1>
+        <form  class="form-horizontal">
+          <div class="form-group">
+            <label for="single-elt">JSON to test</label>
+            <textarea  class="form-control" name="single-elt" rows="6"></textarea>         
+          </div>
+          <div class="form-group">
+            <label for="ajustment">0%</label>
+            <input type="range" min="0" max="100" step="1" id="ajustment" value="0" name="ajustment" />  
+          </div>
+          <button class="btn btn-primary" type="sybmit">Tester</button>
+        </form>
+       
+      </div>
+        
+        <script type="text/javascript">
+          $('input[name="ajustment"]').on('change', function(e){
+            $('label[for="ajustment"]').html(e.target.value + "%");
+          });
+          $('form').on('submit', function(e){
+            e.preventDefault();
+            console.log(this.serializeArray());
+          });
+        </script>
+    </body>
+</html>
