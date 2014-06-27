@@ -16,25 +16,89 @@
         <form  class="form-horizontal">
           <div class="form-group">
             <label for="single-elt">JSON to test</label>
-            <textarea  class="form-control" name="single-elt" rows="6"></textarea>         
+            <textarea  class="form-control" name="singleElt" rows="6"></textarea>         
           </div>
           <div class="form-group">
             <label for="ajustment">0%</label>
             <input type="range" min="0" max="100" step="1" id="ajustment" value="0" name="ajustment" />  
           </div>
+          <div class="form-group">
+            <label for="nbObject">Nombre d'objet à insérer.</label>
+            <input type="number" min="0" max="100000" step="1" id="nbObject" value="0" name="nbObject" />  
+          </div>
           <button class="btn btn-primary" type="sybmit">Tester</button>
         </form>
-       
+        <div id='notifications'>
+          
+        </div>
       </div>
         
         <script type="text/javascript">
+
+          //Repeat the string pattern.
+          String.prototype.repeat = function(num) {
+            return new Array(num + 1).join(this);
+          }
+        
+          //Guid function.
+          var guid = (function() {
+            function s4() {
+              return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+            }
+            return function() {
+              return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+            };
+          })();
+          function toObject(arr) {
+            var rv = {};
+            for (var i = 0; i < arr.length; ++i)
+              rv[arr[i].name] = arr[i].value;
+            return rv;
+          }
+          //Update the slider label.
           $('input[name="ajustment"]').on('change', function(e){
             $('label[for="ajustment"]').html(e.target.value + "%");
           });
+
+          //Submit form event.
           $('form').on('submit', function(e){
             e.preventDefault();
-            console.log(this.serializeArray());
+            var data = $(this).serializeArray();
+            populateLocalStorage(toObject(data));
           });
+          
+          function populateLocalStorage(data){
+            data = data || {};
+            var json =jQuery.parseJSON( data.singleElt) || {};
+            var coeff = Math.floor( 1 +((data.ajustment || 0)/100))+1 ;
+            //Increase the json size.
+            for(prop in json){
+              var stringJson = ""+ json[prop];
+              json[prop] =  stringJson.repeat(stringJson.length * coeff); 
+            }
+            var stringifyJSON = JSON.stringify(json);
+            var limit = 0;
+            for (var i = 0; i < +(data.nbObject||0); i++) {
+              try {
+                localStorage.setItem(guid(), stringifyJSON)
+              } catch (e) {
+                console.log("LIMIT REACHED: (" + i + ")");
+                limit = i;
+                break;
+              }
+            }
+            var message = function(){
+              if(limit === 0){
+                return "La limite n'est pas atteinte, vous pouvez stocker "+data.nbObject+ " sans problèmes";
+              }else {
+                return 'La limite est de ' + limit + " objets de longeur " + stringifyJSON.length;
+              }
+            }();
+            $('#notifications').html("<p class='bg-danger'>"+message+"</p>");
+          }
         </script>
     </body>
 </html>
