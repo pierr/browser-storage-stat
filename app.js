@@ -38,12 +38,26 @@ util.json = {
       r = r + (pVal[0] == '"' ? str : val) + pVal + '</span>';
     return r + (pEnd || '');
   },
-  prettyPrint: function(obj) {
-    var jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
-    return JSON.stringify(obj, null, 3)
-      .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-      .replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(jsonLine, util.json.replacer);
+  prettyPrint: function(json) {
+    if (typeof json != 'string') {
+         json = JSON.stringify(json, undefined, 2);
+    }
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
   }
 };
 
@@ -75,17 +89,16 @@ function populateLocalStorage(data) {
     return "";
   }
 
-  var coeff = Math.floor(1 + ((data.ajustment || 0) / 100)) + 1;
   //Increase the json size.
   var nbProp = 0;
   for (var prop in json) {
     var stringJson = "" + json[prop];
-    json[prop] = stringJson.repeat(stringJson.length * coeff);
+    json[prop] = stringJson.repeat(+data.ajustment);
     nbProp++;
   }
   var remainingProp = Math.abs(data.ppte - nbProp);
   for (var j = 0; j < remainingProp; j++) {
-    json[guid()] = guid() + guid() + guid() + guid();
+    json[Faker.Internet.userName()+'_'+guid()] = Faker.Lorem.paragraphs();
   }
   var stringifyJSON = JSON.stringify(json);
   var limit = 0;
@@ -138,6 +151,23 @@ $(function() {
     $('label[for="ppte"]').html(e.target.value);
   });
 
+  $('button#genQuestions').on('click', function(e){
+    number = +($(this).attr('data-nbToGen')) || 20;
+    var questions = "{";
+    for(var i=0; i<number;i++){
+      questions+=('"question_'+i+'":'+'"'+Faker.Lorem.sentence()+'",');
+    }
+    if(number>0){
+      questions = questions.slice(0,-1);
+    }
+    questions+='}';
+    $('textarea[name="singleElt"]').val(questions);
+  });
+
+  $('input#nbObjetToGen').on('change', function(e){
+    $('kbd.nb-nbObjetToGen').html(event.target.value);
+    $("button#genQuestions").attr('data-nbToGen', event.target.value);
+  });
   //Submit form event.
   $('form').on('submit', function(e) {
     e.preventDefault();

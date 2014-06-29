@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="app.css">
         <script type="text/javascript" src="vendor/jquery.js"></script>
         <script type="text/javascript" src="vendor/bootstrap.js"></script>
+        <script type="text/javascript" src="vendor/faker.js"></script>
         <script type="text/javascript" src="app.js"></script>
 
         <link rel="author" href="humans.txt">
@@ -19,17 +20,26 @@
       
       <div class="container">
         <h1>Client storage test</h1>
+        <hr/>
+        <div>
+          <div class="form-group">
+              <label for="nbObjetToGen">Nombre d'objet à générer.</label>
+              <input type="number" min="0" max="10000" step="1" id="nbObjetToGen" value="20" name="nbObjetToGen" />  
+          </div>
+          <button class="btn btn-block btn-warning" data-nbToGen="20" id="genQuestions">Generate <kbd class="nb-nbObjetToGen">20</kbd> questions</button>
+        </div>
+        <hr/>
         <form  class="form-horizontal">
           <div class="form-group">
             <label for="single-elt">JSON to test</label>
             <textarea  class="form-control" name="singleElt" rows="6" >{}</textarea>         
           </div>
           <div class="form-group">
-            <label for="ajustment-label">Variation de la taille des contenu de l'objet</label>
-            <label for="ajustment">100</label>
-            <label for="ajustement-percent">%</label>
+            <label for="ajustment-label">Nombre de répétition du contenu de l'objet</label>
+            <label for="ajustment">1</label>
+            <label for="ajustement-percent"> fois</label>
            
-          <input type="range" min="0" max="100" step="1" name="ajustment">
+          <input type="range" min="0" max="10" step="1" name="ajustment" value="1">
           </div>
           <div class="form-group">
             <label for="ppte-label">Nombre propriétés dans l'objet.</label>
@@ -41,7 +51,7 @@
             <label for="nbObject">Nombre d'objet à insérer.</label>
             <input type="number" min="0" max="100000" step="1" id="nbObject" value="100000" name="nbObject" />  
           </div>
-          <button class="btn btn-primary" type="sybmit">Tester</button>
+          <button class="btn btn-primary btn-block" type="submit">Tester</button>
         </form>
         <hr />
         <div class="row" id='notifications'></div>

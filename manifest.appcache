@@ -3,5 +3,6 @@ index.html
 vendor/bootstrap.js
 vendor/bootstrap.css
 vendor/jquery.js
+vendor/faker.js
 app.js
 app.css
