@@ -1,0 +1,53 @@
+<!doctype html>
+<html manifest="manifest.appcache">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="local">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Client storage test.</title>
+        <link rel="stylesheet" href="vendor/bootstrap.css">
+        <link rel="stylesheet" href="app.css">
+        <script type="text/javascript" src="vendor/jquery.js"></script>
+        <script type="text/javascript" src="vendor/bootstrap.js"></script>
+        <script type="text/javascript" src="app.js"></script>
+
+        <link rel="author" href="humans.txt">
+        <style type="text/css">
+          </style>
+    </head>
+    <body>
+      
+      <div class="container">
+        <h1>Client storage test</h1>
+        <form  class="form-horizontal">
+          <div class="form-group">
+            <label for="single-elt">JSON to test</label>
+            <textarea  class="form-control" name="singleElt" rows="6" >{}</textarea>         
+          </div>
+          <div class="form-group">
+            <label for="ajustment-label">Variation de la taille des contenu de l'objet</label>
+            <label for="ajustment">100</label>
+            <label for="ajustement-percent">%</label>
+           
+          <input type="range" min="0" max="100" step="1" name="ajustment">
+          </div>
+          <div class="form-group">
+            <label for="ppte-label">Nombre propriétés dans l'objet.</label>
+            <label for="ppte">20</label>
+            <label for="ppte-nb">pptés</label>
+            <input type="range" min="0" max="1000" step="1" id="ppte" value="20" name="ppte" />  
+          </div>
+          <div class="form-group">
+            <label for="nbObject">Nombre d'objet à insérer.</label>
+            <input type="number" min="0" max="100000" step="1" id="nbObject" value="100000" name="nbObject" />  
+          </div>
+          <button class="btn btn-primary" type="sybmit">Tester</button>
+        </form>
+        <hr />
+        <div class="row" id='notifications'></div>
+         <div class="row" >
+           <code id="codeContainer"></code>
+         </div>
+      </div>
+    </body>
+</html>
